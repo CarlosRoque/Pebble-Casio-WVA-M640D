@@ -1,0 +1,64 @@
+{
+  "name": "WVA-M640D",
+  "author": "MakeAwesomeHappen",
+  "version": "1.0.0",
+  "keywords": [
+    "pebble-app"
+  ],
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "WVA-M640D",
+    "uuid": "633b94e6-2a0d-4f78-8ad8-4c94c8918e24",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "emery"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "messageKeys": [
+      "dummy"
+    ],
+    "resources": {
+      "media": [
+        {
+          "type": "bitmap",
+          "name": "BACKGROUND",
+          "file": "images/WVA-M640D.png",
+          "targetPlatforms": [
+            "emery"
+          ]
+        },
+        {
+          "type": "bitmap",
+          "name": "HOUR_HAND",
+          "file": "images/WVA-M640D-hour.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "MINUTE_HAND",
+          "file": "images/WVA-M640D-minute.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "SECOND_HAND",
+          "file": "images/WVA-M640D-second.png"
+        },
+        {
+          "characterRegex": "[ADEFHIMNOSTUW:0-9]",
+          "type": "font",
+          "name": "DOTO_18",
+          "file": "fonts/Doto-VariableFont_ROND,wght.ttf"
+        },
+        {
+          "characterRegex": "[ADEFHIMNOSTUW:0-9]",
+          "type": "font",
+          "name": "DOTO_16",
+          "file": "fonts/Doto-VariableFont_ROND,wght.ttf"
+        }
+      ]
+    }
+  }
+}
