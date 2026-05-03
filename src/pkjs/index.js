@@ -48,7 +48,7 @@ function boolSetting(val, defaultVal) {
 }
 
 Pebble.addEventListener('ready', function() {
-  var settings = clay.getSettings();
+  var settings = JSON.parse(localStorage.getItem('clay-settings') || '{}');
   var apiKey = settings.OWM_API_KEY || DEFAULT_API_KEY;
   var units = boolSetting(settings.S_USE_FAHRENHEIT, false);
   var vibBt = boolSetting(settings.S_VIB_BT, true);

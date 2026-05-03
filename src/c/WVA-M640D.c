@@ -177,12 +177,12 @@ static TextLayer *create_text_layer(Layer *parent, GRect text_box, GFont font, G
 }
 
 static void dst_layer_update_proc(Layer *layer, GContext *ctx) {
-  graphics_context_set_fill_color(ctx, GColorLightGray);
+  graphics_context_set_fill_color(ctx, GColorDarkGray);
   graphics_fill_rect(ctx, layer_get_bounds(layer), 0, GCornerNone);
 }
 
 static void bt_layer_update_proc(Layer *layer, GContext *ctx) {
-  graphics_context_set_fill_color(ctx, GColorLightGray);
+  graphics_context_set_fill_color(ctx, GColorDarkGray);
   graphics_fill_rect(ctx, layer_get_bounds(layer), 0, GCornerNone);
 }
 
@@ -207,8 +207,10 @@ static void prv_window_load(Window *window) {
   s_small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DOTO_16));
 
   s_day_layer = create_text_layer(window_layer, GRect(DAY_LAYER_X, DAY_LAYER_Y, DAY_LAYER_W, DAY_LAYER_H), s_large_font, GTextAlignmentCenter);
+  text_layer_set_text_color(s_day_layer, GColorDarkGray);
 
   s_day_num_layer = create_text_layer(window_layer, GRect(DAY_NUM_LAYER_X, DAY_NUM_LAYER_Y, DAY_NUM_LAYER_W, DAY_NUM_LAYER_H), s_small_font, GTextAlignmentRight);
+  text_layer_set_text_color(s_day_num_layer, GColorDarkGray);
 
   s_dst_layer = layer_create(GRect(DST_LAYER_X, DST_LAYER_Y, DST_LAYER_W, DST_LAYER_H));
   layer_set_update_proc(s_dst_layer, dst_layer_update_proc);
@@ -238,11 +240,13 @@ static void prv_window_load(Window *window) {
   s_weather_icon_layer = create_text_layer(window_layer,
     GRect(WEATHER_ICON_X, WEATHER_ICON_Y, WEATHER_ICON_W, WEATHER_ICON_H),
     s_weather_font, GTextAlignmentRight);
+  text_layer_set_text_color(s_weather_icon_layer, GColorWhite);
   text_layer_set_text(s_weather_icon_layer, s_weather_icon_buf);
 
   s_weather_temp_layer = create_text_layer(window_layer,
     GRect(WEATHER_TEMP_X, WEATHER_TEMP_Y, WEATHER_TEMP_W, WEATHER_TEMP_H),
     s_small_font, GTextAlignmentLeft);
+  text_layer_set_text_color(s_weather_temp_layer, GColorWhite);
   text_layer_set_text(s_weather_temp_layer, s_weather_temp_buf);
 
   s_hour_hand_layer = create_hand_layer(window_layer, center, RESOURCE_ID_HOUR_HAND,

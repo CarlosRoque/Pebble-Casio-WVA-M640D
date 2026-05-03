@@ -51,6 +51,6 @@ module.exports = [
   },
   {
     type: "text",
-    defaultValue: "WVA-M640D v1.0",
+    defaultValue: "WVA-M640D v1.0.1",
   },
 ];
