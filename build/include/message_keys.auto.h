@@ -6,4 +6,11 @@
 // DO NOT MODIFY - CHANGES WILL BE OVERWRITTEN
 //
 
-extern uint32_t MESSAGE_KEY_dummy;
+extern uint32_t MESSAGE_KEY_JS_READY;
+extern uint32_t MESSAGE_KEY_OWM_API_KEY;
+extern uint32_t MESSAGE_KEY_S_BATT_DISPLAY;
+extern uint32_t MESSAGE_KEY_S_UNITS;
+extern uint32_t MESSAGE_KEY_S_VIB_BT;
+extern uint32_t MESSAGE_KEY_W_COND;
+extern uint32_t MESSAGE_KEY_W_ICON;
+extern uint32_t MESSAGE_KEY_W_TEMP;

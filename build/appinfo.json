@@ -10,7 +10,14 @@
         "watchface": true
     },
     "messageKeys": {
-        "dummy": 10000
+        "JS_READY": 10000,
+        "W_ICON": 10001,
+        "W_TEMP": 10002,
+        "W_COND": 10003,
+        "S_UNITS": 10004,
+        "S_VIB_BT": 10005,
+        "S_BATT_DISPLAY": 10006,
+        "OWM_API_KEY": 10007
     },
     "resources": {
         "media": [
@@ -38,16 +45,27 @@
                 "file": "images/WVA-M640D-second.png"
             },
             {
-                "characterRegex": "[ADEFHIMNOSTUW:0-9]",
+                "type": "bitmap",
+                "name": "BATTERY",
+                "file": "images/Battery.png"
+            },
+            {
+                "characterRegex": "[-+ACDEFHIMNOSTUW:0-9\u00b0%]",
                 "type": "font",
                 "name": "DOTO_18",
                 "file": "fonts/Doto-VariableFont_ROND,wght.ttf"
             },
             {
-                "characterRegex": "[ADEFHIMNOSTUW:0-9]",
+                "characterRegex": "[-+ACDEFHIMNOSTUW:0-9\u00b0%]",
                 "type": "font",
                 "name": "DOTO_16",
                 "file": "fonts/Doto-VariableFont_ROND,wght.ttf"
+            },
+            {
+                "characterRegex": "[I\"!k$+F9=N#,>h]",
+                "type": "font",
+                "name": "WEATHER_ICON_24",
+                "file": "fonts/Climacons.ttf"
             }
         ]
     },
@@ -57,7 +75,16 @@
     "versionLabel": "1.0.0",
     "companyName": "MakeAwesomeHappen",
     "appKeys": {
-        "dummy": 10000
+        "JS_READY": 10000,
+        "W_ICON": 10001,
+        "W_TEMP": 10002,
+        "W_COND": 10003,
+        "S_UNITS": 10004,
+        "S_VIB_BT": 10005,
+        "S_BATT_DISPLAY": 10006,
+        "OWM_API_KEY": 10007
     },
-    "capabilities": []
+    "capabilities": [
+        "configurable"
+    ]
 }
