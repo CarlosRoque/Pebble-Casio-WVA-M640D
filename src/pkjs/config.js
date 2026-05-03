@@ -13,7 +13,7 @@ module.exports = [
   },
   {
     type: "select",
-    messageKey: "S_UNITS",
+    messageKey: "S_USE_FAHRENHEIT",
     label: "Temperature Units",
     defaultValue: "0",
     options: [
@@ -27,7 +27,7 @@ module.exports = [
   },
   {
     type: "select",
-    messageKey: "S_BATT_DISPLAY",
+    messageKey: "S_BATT_SHOW_PCT",
     label: "Battery Display",
     defaultValue: "0",
     options: [

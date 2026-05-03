@@ -50,11 +50,11 @@ function boolSetting(val, defaultVal) {
 Pebble.addEventListener('ready', function() {
   var settings = clay.getSettings();
   var apiKey = settings.OWM_API_KEY || DEFAULT_API_KEY;
-  var units = boolSetting(settings.S_UNITS, false);
+  var units = boolSetting(settings.S_USE_FAHRENHEIT, false);
   var vibBt = boolSetting(settings.S_VIB_BT, true);
-  var battDisp = boolSetting(settings.S_BATT_DISPLAY, true);
+  var battDisp = boolSetting(settings.S_BATT_SHOW_PCT, false);
 
-  Pebble.sendAppMessage({ 'S_UNITS': units, 'S_VIB_BT': vibBt, 'S_BATT_DISPLAY': battDisp },
+  Pebble.sendAppMessage({ 'S_USE_FAHRENHEIT': units, 'S_VIB_BT': vibBt, 'S_BATT_SHOW_PCT': battDisp },
     function() { fetchWeather(apiKey); },
     function() { fetchWeather(apiKey); }
   );

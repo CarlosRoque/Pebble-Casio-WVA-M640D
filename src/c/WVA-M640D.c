@@ -20,7 +20,7 @@ static Layer *s_hands_pivot_layer;
 static TextLayer *s_weather_icon_layer;
 static TextLayer *s_weather_temp_layer;
 static GFont s_weather_font;
-static char s_weather_icon_buf[2] = "h";
+static char s_weather_icon_buf[2] = "I";
 static char s_weather_temp_buf[10] = "---";
 static bool s_weather_loaded = false;
 static int16_t s_last_temp_c = 0;
@@ -31,7 +31,7 @@ static GBitmap *s_batt_all;
 static GBitmap *s_batt_frame;
 static TextLayer *s_batt_text_layer;
 static char s_batt_text_buf[6] = "---";
-static bool s_batt_display_pct = true;
+static bool s_batt_display_pct = false;
 
 // 12-hour cycle = 720 minutes = 360 degrees, so 1 degree = 2 minutes.
 static const char *day_string(int wday) {
@@ -105,9 +105,9 @@ static void update_weather_temp(void) {
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
   Tuple *icon_t   = dict_find(iterator, MESSAGE_KEY_W_ICON);
   Tuple *temp_t   = dict_find(iterator, MESSAGE_KEY_W_TEMP);
-  Tuple *units_t  = dict_find(iterator, MESSAGE_KEY_S_UNITS);
+  Tuple *units_t  = dict_find(iterator, MESSAGE_KEY_S_USE_FAHRENHEIT);
   Tuple *vib_bt_t   = dict_find(iterator, MESSAGE_KEY_S_VIB_BT);
-  Tuple *batt_disp_t = dict_find(iterator, MESSAGE_KEY_S_BATT_DISPLAY);
+  Tuple *batt_disp_t = dict_find(iterator, MESSAGE_KEY_S_BATT_SHOW_PCT);
 
   if (units_t) { s_units_fahrenheit = tuple_bool(units_t); update_weather_temp(); }
   if (vib_bt_t) { s_vib_bt = tuple_bool(vib_bt_t); }

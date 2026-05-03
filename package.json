@@ -25,9 +25,9 @@
       "W_ICON",
       "W_TEMP",
       "W_COND",
-      "S_UNITS",
+      "S_USE_FAHRENHEIT",
       "S_VIB_BT",
-      "S_BATT_DISPLAY",
+      "S_BATT_SHOW_PCT",
       "OWM_API_KEY"
     ],
     "resources": {
