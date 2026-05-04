@@ -13,6 +13,7 @@ static GBitmap *s_second_hand_bitmap;
 static TextLayer *s_day_layer;
 static GFont s_large_font;
 static GFont s_small_font;
+static GFont s_system_font;
 static TextLayer *s_day_num_layer;
 static Layer *s_dst_layer;
 static Layer *s_bt_layer;
@@ -30,7 +31,7 @@ static BitmapLayer *s_batt_icon_layer;
 static GBitmap *s_batt_all;
 static GBitmap *s_batt_frame;
 static TextLayer *s_batt_text_layer;
-static char s_batt_text_buf[6] = "---";
+static char s_batt_text_buf[7] = "---";
 static bool s_batt_display_pct = false;
 
 // 12-hour cycle = 720 minutes = 360 degrees, so 1 degree = 2 minutes.
@@ -66,13 +67,13 @@ static void update_hands(struct tm *t) {
   rot_bitmap_layer_set_angle(s_second_hand_layer, seconds_angle(t));
 }
 
-static void update_text(struct tm *t) {
+static void update_display_text(struct tm *t) {
   text_layer_set_text(s_day_layer, day_string(t->tm_wday));
   text_layer_set_text(s_day_num_layer, day_num_string(t->tm_mday));
 }
 
 static bool tuple_bool(Tuple *t) {
-  if (t->type == TUPLE_CSTRING) return t->value->cstring[0] != '0';
+  if (t->type == TUPLE_CSTRING) return ((const char *)t->value)[0] != '0';
   return t->value->int32 != 0;
 }
 
@@ -118,7 +119,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     update_battery_display();
   }
   if (icon_t) {
-    s_weather_icon_buf[0] = icon_t->value->cstring[0];
+    s_weather_icon_buf[0] = ((const char *)icon_t->value)[0];
     s_weather_icon_buf[1] = '\0';
     text_layer_set_text(s_weather_icon_layer, s_weather_icon_buf);
   }
@@ -148,7 +149,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     layer_set_hidden(s_dst_layer, tick_time->tm_isdst <= 0);
   }
   if (units_changed & DAY_UNIT) {
-    update_text(tick_time);
+    update_display_text(tick_time);
   }
 }
 
@@ -204,7 +205,8 @@ static void prv_window_load(Window *window) {
   layer_add_child(window_layer, bitmap_layer_get_layer(s_bg_layer));
 
   s_large_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DOTO_18));
-  s_small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DOTO_16));
+  s_small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DOTO_17));
+  s_system_font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
 
   s_day_layer = create_text_layer(window_layer, GRect(DAY_LAYER_X, DAY_LAYER_Y, DAY_LAYER_W, DAY_LAYER_H), s_large_font, GTextAlignmentCenter);
   text_layer_set_text_color(s_day_layer, GColorDarkGray);
@@ -230,13 +232,14 @@ static void prv_window_load(Window *window) {
 
   s_batt_text_layer = create_text_layer(window_layer,
     GRect(BATT_TEXT_X, BATT_TEXT_Y, BATT_TEXT_W, BATT_TEXT_H),
-    s_small_font, GTextAlignmentRight);
+    s_system_font, GTextAlignmentRight);
+  text_layer_set_text_color(s_batt_text_layer, GColorWhite);
   text_layer_set_text(s_batt_text_layer, s_batt_text_buf);
   layer_set_hidden(bitmap_layer_get_layer(s_batt_icon_layer), s_batt_display_pct);
   layer_set_hidden(text_layer_get_layer(s_batt_text_layer), !s_batt_display_pct);
   update_battery_display();
 
-  s_weather_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_WEATHER_ICON_24));
+  s_weather_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_WEATHER_ICON_34));
   s_weather_icon_layer = create_text_layer(window_layer,
     GRect(WEATHER_ICON_X, WEATHER_ICON_Y, WEATHER_ICON_W, WEATHER_ICON_H),
     s_weather_font, GTextAlignmentRight);
@@ -245,16 +248,16 @@ static void prv_window_load(Window *window) {
 
   s_weather_temp_layer = create_text_layer(window_layer,
     GRect(WEATHER_TEMP_X, WEATHER_TEMP_Y, WEATHER_TEMP_W, WEATHER_TEMP_H),
-    s_small_font, GTextAlignmentLeft);
+    s_system_font, GTextAlignmentLeft);
   text_layer_set_text_color(s_weather_temp_layer, GColorWhite);
   text_layer_set_text(s_weather_temp_layer, s_weather_temp_buf);
 
-  s_hour_hand_layer = create_hand_layer(window_layer, center, RESOURCE_ID_HOUR_HAND,
-                                         HOUR_LAYER_SIZE, GPoint(HOUR_PIVOT_X, HOUR_PIVOT_Y),
-                                         &s_hour_hand_bitmap);
   s_minute_hand_layer = create_hand_layer(window_layer, center, RESOURCE_ID_MINUTE_HAND,
                                            MINUTE_LAYER_SIZE, GPoint(MINUTE_PIVOT_X, MINUTE_PIVOT_Y),
                                            &s_minute_hand_bitmap);
+  s_hour_hand_layer = create_hand_layer(window_layer, center, RESOURCE_ID_HOUR_HAND,
+                                         HOUR_LAYER_SIZE, GPoint(HOUR_PIVOT_X, HOUR_PIVOT_Y),
+                                         &s_hour_hand_bitmap);
   s_second_hand_layer = create_hand_layer(window_layer, center, RESOURCE_ID_SECOND_HAND,
                                            SECOND_LAYER_SIZE, GPoint(SECOND_PIVOT_X, SECOND_PIVOT_Y),
                                            &s_second_hand_bitmap);
@@ -266,7 +269,7 @@ static void prv_window_load(Window *window) {
   time_t now = time(NULL);
   struct tm *t = localtime(&now);
   update_hands(t);
-  update_text(t);
+  update_display_text(t);
   layer_set_hidden(s_dst_layer, t->tm_isdst <= 0);
 }
 
@@ -281,6 +284,7 @@ static void prv_window_unload(Window *window) {
   text_layer_destroy(s_day_layer);
   fonts_unload_custom_font(s_large_font);
   fonts_unload_custom_font(s_small_font);
+  fonts_unload_custom_font(s_system_font);
   text_layer_destroy(s_day_num_layer);
   layer_destroy(s_hands_pivot_layer);
   rot_bitmap_layer_destroy(s_second_hand_layer);

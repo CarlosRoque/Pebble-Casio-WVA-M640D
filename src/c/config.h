@@ -2,7 +2,7 @@
 
 // Clock face center on screen (tune to match background image)
 #define CLOCK_CENTER_X 100
-#define CLOCK_CENTER_Y 112
+#define CLOCK_CENTER_Y 111
 
 // Hour hand: 8x67px, pivot 49px from top
 #define HOUR_PIVOT_X 4
@@ -20,13 +20,13 @@
 #define SECOND_LAYER_SIZE 142  // 2 * ceil(max rotation radius ~67px) + margin
 
 // Weather layer layout
-#define WEATHER_ICON_X  160
-#define WEATHER_ICON_Y  195
-#define WEATHER_ICON_W   30
-#define WEATHER_ICON_H   42
+#define WEATHER_ICON_X  150
+#define WEATHER_ICON_Y  185
+#define WEATHER_ICON_W   40
+#define WEATHER_ICON_H   45
 
-#define WEATHER_TEMP_X   15
-#define WEATHER_TEMP_Y  200
+#define WEATHER_TEMP_X   10
+#define WEATHER_TEMP_Y  195
 #define WEATHER_TEMP_W   70
 #define WEATHER_TEMP_H   22
 
@@ -37,7 +37,7 @@
 #define DAY_LAYER_H     40
 
 #define DAY_NUM_LAYER_X 105
-#define DAY_NUM_LAYER_Y 145
+#define DAY_NUM_LAYER_Y 146
 #define DAY_NUM_LAYER_W  25
 #define DAY_NUM_LAYER_H  20
 
@@ -57,7 +57,7 @@
 #define BATT_ICON_W     20
 #define BATT_ICON_H     10
 
-#define BATT_TEXT_X    140
-#define BATT_TEXT_Y      6
+#define BATT_TEXT_X    145
+#define BATT_TEXT_Y      3
 #define BATT_TEXT_W     50
 #define BATT_TEXT_H     18

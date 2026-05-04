@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.2
+### Improvements
+- Made luminecent parts a different color than white for better readbility
+- Other color changes to the hands for better visibility
+- Changed to system font for battery percentage and temperature and changed color to white
+- Made the weather icon larger and changed it to white
+- Made the day number larger
+
 ## v1.0.1
 ### Improvements
 - Day, date, Bluetooth, and DST indicators updated to dark grey for better contrast against the watch face

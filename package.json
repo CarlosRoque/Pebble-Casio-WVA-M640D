@@ -1,7 +1,7 @@
 {
   "name": "WVA-M640D",
   "author": "MakeAwesomeHappen",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "keywords": [
     "pebble-app"
   ],
@@ -69,13 +69,13 @@
         {
           "characterRegex": "[-+ACDEFHIMNOSTUW:0-9°%]",
           "type": "font",
-          "name": "DOTO_16",
+          "name": "DOTO_17",
           "file": "fonts/Doto-VariableFont_ROND,wght.ttf"
         },
         {
           "characterRegex": "[I\"!k$+F9=N#,>h]",
           "type": "font",
-          "name": "WEATHER_ICON_24",
+          "name": "WEATHER_ICON_34",
           "file": "fonts/Climacons.ttf"
         }
       ]
