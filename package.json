@@ -1,7 +1,7 @@
 {
-  "name": "WVA-M640D",
+  "name": "Casio WVA-M640D",
   "author": "MakeAwesomeHappen",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "keywords": [
     "pebble-app"
   ],
@@ -10,7 +10,7 @@
     "pebble-clay": "*"
   },
   "pebble": {
-    "displayName": "WVA-M640D",
+    "displayName": "Casio WVA-M640D",
     "uuid": "633b94e6-2a0d-4f78-8ad8-4c94c8918e24",
     "sdkVersion": "3",
     "enableMultiJS": true,

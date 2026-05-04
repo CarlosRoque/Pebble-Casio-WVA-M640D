@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.3
+### Bug Fixes
+- Crash fix
+
 ## v1.0.2
 ### Improvements
 - Made luminecent parts a different color than white for better readbility

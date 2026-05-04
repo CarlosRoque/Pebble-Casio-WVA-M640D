@@ -5,12 +5,12 @@
 #define CLOCK_CENTER_Y 111
 
 // Hour hand: 8x67px, pivot 49px from top
-#define HOUR_PIVOT_X 4
-#define HOUR_PIVOT_Y 49
-#define HOUR_LAYER_SIZE 98  // 2 * ceil(max rotation radius ~49px) + margin
+#define HOUR_PIVOT_X 5
+#define HOUR_PIVOT_Y 45
+#define HOUR_LAYER_SIZE 90  // 2 * ceil(max rotation radius ~49px) + margin
 
 // Minute hand: 6x86px, pivot 64px from top
-#define MINUTE_PIVOT_X 3
+#define MINUTE_PIVOT_X 4
 #define MINUTE_PIVOT_Y 64
 #define MINUTE_LAYER_SIZE 128  // 2 * ceil(max rotation radius ~67px) + margin
 
@@ -53,7 +53,7 @@
 
 // Battery indicator layout
 #define BATT_ICON_X    170
-#define BATT_ICON_Y     10
+#define BATT_ICON_Y     13
 #define BATT_ICON_W     20
 #define BATT_ICON_H     10
 

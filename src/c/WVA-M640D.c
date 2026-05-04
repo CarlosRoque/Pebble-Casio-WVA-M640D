@@ -275,28 +275,27 @@ static void prv_window_load(Window *window) {
 
 static void prv_window_unload(Window *window) {
   bitmap_layer_destroy(s_batt_icon_layer);
-  if (s_batt_frame) gbitmap_destroy(s_batt_frame);
-  gbitmap_destroy(s_batt_all);
   text_layer_destroy(s_batt_text_layer);
   text_layer_destroy(s_weather_icon_layer);
   text_layer_destroy(s_weather_temp_layer);
-  fonts_unload_custom_font(s_weather_font);
   text_layer_destroy(s_day_layer);
-  fonts_unload_custom_font(s_large_font);
-  fonts_unload_custom_font(s_small_font);
-  fonts_unload_custom_font(s_system_font);
   text_layer_destroy(s_day_num_layer);
-  layer_destroy(s_hands_pivot_layer);
-  rot_bitmap_layer_destroy(s_second_hand_layer);
-  gbitmap_destroy(s_second_hand_bitmap);
-  rot_bitmap_layer_destroy(s_minute_hand_layer);
-  gbitmap_destroy(s_minute_hand_bitmap);
-  rot_bitmap_layer_destroy(s_hour_hand_layer);
-  gbitmap_destroy(s_hour_hand_bitmap);
-  bitmap_layer_destroy(s_bg_layer);
-  gbitmap_destroy(s_bg_bitmap);
   layer_destroy(s_dst_layer);
   layer_destroy(s_bt_layer);
+  layer_destroy(s_hands_pivot_layer);
+  rot_bitmap_layer_destroy(s_second_hand_layer);
+  rot_bitmap_layer_destroy(s_minute_hand_layer);
+  rot_bitmap_layer_destroy(s_hour_hand_layer);
+  bitmap_layer_destroy(s_bg_layer);
+  if (s_batt_frame) gbitmap_destroy(s_batt_frame);
+  gbitmap_destroy(s_batt_all);
+  gbitmap_destroy(s_second_hand_bitmap);
+  gbitmap_destroy(s_minute_hand_bitmap);
+  gbitmap_destroy(s_hour_hand_bitmap);
+  gbitmap_destroy(s_bg_bitmap);
+  fonts_unload_custom_font(s_weather_font);
+  fonts_unload_custom_font(s_large_font);
+  fonts_unload_custom_font(s_small_font);
 }
 
 static void prv_init(void) {
