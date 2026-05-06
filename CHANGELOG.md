@@ -1,9 +1,14 @@
 # Changelog
 
+## v1.0.5
+### Improvements
+- Disable seconds hand for better battery performance
+- Flick to enable seconds hand to save on battery
+ 
 ## v1.0.4
 ### Improvements
 - Darker background for better readability 
-- 
+
 ## v1.0.3
 ### Bug Fixes
 - Crash fix

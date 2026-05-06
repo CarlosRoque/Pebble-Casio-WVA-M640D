@@ -1,7 +1,7 @@
 {
   "name": "Casio WVA-M640D",
   "author": "MakeAwesomeHappen",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "keywords": [
     "pebble-app"
   ],
@@ -28,6 +28,7 @@
       "S_USE_FAHRENHEIT",
       "S_VIB_BT",
       "S_BATT_SHOW_PCT",
+      "S_SHOW_SECONDS",
       "OWM_API_KEY"
     ],
     "resources": {

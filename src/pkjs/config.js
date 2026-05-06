@@ -22,6 +22,17 @@ module.exports = [
     ],
   },
   {
+    type: 'select',
+    messageKey: 'S_SHOW_SECONDS',
+    label: 'Seconds Hand',
+    defaultValue: '0',
+    options: [
+      { label: 'Always', value: '0' },
+      { label: 'Never', value: '1' },
+      { label: 'On Flick', value: '2' },
+    ],
+  },
+  {
     type: 'heading',
     defaultValue: 'Battery',
   },

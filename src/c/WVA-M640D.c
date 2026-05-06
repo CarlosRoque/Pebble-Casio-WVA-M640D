@@ -33,6 +33,14 @@ static GBitmap *s_batt_frame;
 static TextLayer *s_batt_text_layer;
 static char s_batt_text_buf[7] = "---";
 static bool s_batt_display_pct = false;
+#define SECONDS_ALWAYS    0
+#define SECONDS_NEVER     1
+#define SECONDS_FLICK     2
+#define BACKLIGHT_DURATION_MS 5000
+
+static int s_seconds_mode = SECONDS_ALWAYS;
+static bool s_seconds_visible = true;
+static AppTimer *s_seconds_timer = NULL;
 
 // 12-hour cycle = 720 minutes = 360 degrees, so 1 degree = 2 minutes.
 static const char *day_string(int wday) {
@@ -77,6 +85,11 @@ static bool tuple_bool(Tuple *t) {
   return t->value->int32 != 0;
 }
 
+static int tuple_int(Tuple *t) {
+  if (t->type == TUPLE_CSTRING) return atoi((const char *)t->value);
+  return (int)t->value->int32;
+}
+
 static void update_battery_display(void) {
   BatteryChargeState state = battery_state_service_peek();
   if (s_batt_display_pct) {
@@ -103,12 +116,62 @@ static void update_weather_temp(void) {
   text_layer_set_text(s_weather_temp_layer, s_weather_temp_buf);
 }
 
+static void update_tick_subscription(void);
+
+static void seconds_timer_callback(void *data) {
+  s_seconds_timer = NULL;
+  s_seconds_visible = false;
+  layer_set_hidden(rot_bitmap_layer_get_layer(s_second_hand_layer), true);
+  update_tick_subscription();
+}
+
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+  if (s_seconds_mode != SECONDS_FLICK) return;
+
+  s_seconds_visible = true;
+  layer_set_hidden(rot_bitmap_layer_get_layer(s_second_hand_layer), false);
+
+  time_t now = time(NULL);
+  struct tm *t = localtime(&now);
+  rot_bitmap_layer_set_angle(s_second_hand_layer, seconds_angle(t));
+
+  update_tick_subscription();
+
+  if (s_seconds_timer) app_timer_cancel(s_seconds_timer);
+  s_seconds_timer = app_timer_register(BACKLIGHT_DURATION_MS, seconds_timer_callback, NULL);
+}
+
+static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+  if (s_seconds_visible && (units_changed & SECOND_UNIT)) {
+    rot_bitmap_layer_set_angle(s_second_hand_layer, seconds_angle(tick_time));
+  }
+  if (units_changed & MINUTE_UNIT) {
+    rot_bitmap_layer_set_angle(s_minute_hand_layer, minutes_angle(tick_time));
+    if (tick_time->tm_min % 2 == 0) {
+      rot_bitmap_layer_set_angle(s_hour_hand_layer, hours_angle(tick_time));
+    }
+  }
+  if (units_changed & HOUR_UNIT) {
+    layer_set_hidden(s_dst_layer, tick_time->tm_isdst <= 0);
+  }
+  if (units_changed & DAY_UNIT) {
+    update_display_text(tick_time);
+  }
+}
+
+static void update_tick_subscription(void) {
+  bool need_seconds = (s_seconds_mode == SECONDS_ALWAYS) ||
+                      (s_seconds_mode == SECONDS_FLICK && s_seconds_visible);
+  tick_timer_service_subscribe(need_seconds ? SECOND_UNIT : MINUTE_UNIT, tick_handler);
+}
+
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
   Tuple *icon_t   = dict_find(iterator, MESSAGE_KEY_W_ICON);
   Tuple *temp_t   = dict_find(iterator, MESSAGE_KEY_W_TEMP);
   Tuple *units_t  = dict_find(iterator, MESSAGE_KEY_S_USE_FAHRENHEIT);
   Tuple *vib_bt_t   = dict_find(iterator, MESSAGE_KEY_S_VIB_BT);
   Tuple *batt_disp_t = dict_find(iterator, MESSAGE_KEY_S_BATT_SHOW_PCT);
+  Tuple *show_sec_t  = dict_find(iterator, MESSAGE_KEY_S_SHOW_SECONDS);
 
   if (units_t) { s_units_fahrenheit = tuple_bool(units_t); update_weather_temp(); }
   if (vib_bt_t) { s_vib_bt = tuple_bool(vib_bt_t); }
@@ -117,6 +180,16 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     layer_set_hidden(bitmap_layer_get_layer(s_batt_icon_layer), s_batt_display_pct);
     layer_set_hidden(text_layer_get_layer(s_batt_text_layer), !s_batt_display_pct);
     update_battery_display();
+  }
+  if (show_sec_t) {
+    s_seconds_mode = tuple_int(show_sec_t);
+    if (s_seconds_timer) {
+      app_timer_cancel(s_seconds_timer);
+      s_seconds_timer = NULL;
+    }
+    s_seconds_visible = (s_seconds_mode == SECONDS_ALWAYS);
+    layer_set_hidden(rot_bitmap_layer_get_layer(s_second_hand_layer), !s_seconds_visible);
+    update_tick_subscription();
   }
   if (icon_t) {
     s_weather_icon_buf[0] = ((const char *)icon_t->value)[0];
@@ -133,24 +206,6 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 static void hands_pivot_layer_update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_fill_color(ctx, GColorBlack);
   graphics_fill_circle(ctx, GPoint(CLOCK_CENTER_X, CLOCK_CENTER_Y), 3);
-}
-
-static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
-  if (units_changed & SECOND_UNIT) {
-    rot_bitmap_layer_set_angle(s_second_hand_layer, seconds_angle(tick_time));
-  }
-  if (units_changed & MINUTE_UNIT) {
-    rot_bitmap_layer_set_angle(s_minute_hand_layer, minutes_angle(tick_time));
-    if (tick_time->tm_min % 2 == 0) {
-      rot_bitmap_layer_set_angle(s_hour_hand_layer, hours_angle(tick_time));
-    }
-  }
-  if (units_changed & HOUR_UNIT) {
-    layer_set_hidden(s_dst_layer, tick_time->tm_isdst <= 0);
-  }
-  if (units_changed & DAY_UNIT) {
-    update_display_text(tick_time);
-  }
 }
 
 static RotBitmapLayer *create_hand_layer(Layer *parent, GPoint center,
@@ -308,13 +363,15 @@ static void prv_init(void) {
   app_message_open(256, 64);
   battery_state_service_subscribe(battery_callback);
   bluetooth_connection_service_subscribe(bluetooth_callback);
-  tick_timer_service_subscribe(SECOND_UNIT, tick_handler);
+  accel_tap_service_subscribe(accel_tap_handler);
+  update_tick_subscription();
   window_stack_push(s_window, true);
 }
 
 static void prv_deinit(void) {
   battery_state_service_unsubscribe();
   bluetooth_connection_service_unsubscribe();
+  accel_tap_service_unsubscribe();
   tick_timer_service_unsubscribe();
   window_destroy(s_window);
 }

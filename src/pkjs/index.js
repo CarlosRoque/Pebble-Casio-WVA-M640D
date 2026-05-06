@@ -53,8 +53,9 @@ Pebble.addEventListener('ready', function() {
   var units = boolSetting(settings.S_USE_FAHRENHEIT, false);
   var vibBt = boolSetting(settings.S_VIB_BT, true);
   var battDisp = boolSetting(settings.S_BATT_SHOW_PCT, false);
+  var showSec = parseInt(settings.S_SHOW_SECONDS) || 0;
 
-  Pebble.sendAppMessage({ 'S_USE_FAHRENHEIT': units, 'S_VIB_BT': vibBt, 'S_BATT_SHOW_PCT': battDisp },
+  Pebble.sendAppMessage({ 'S_USE_FAHRENHEIT': units, 'S_VIB_BT': vibBt, 'S_BATT_SHOW_PCT': battDisp, 'S_SHOW_SECONDS': showSec },
     function() { fetchWeather(apiKey); },
     function() { fetchWeather(apiKey); }
   );
