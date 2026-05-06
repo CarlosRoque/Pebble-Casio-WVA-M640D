@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.4
+### Improvements
+- Darker background for better readability 
+- 
 ## v1.0.3
 ### Bug Fixes
 - Crash fix
