@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.6
+### Improvements
+- Fixed misisng font
+- larger text all around
+- larger battery indicator
+- larger weather icons
+- update weather on flick not just on face load
+
 ## v1.0.5
 ### Improvements
 - Disable seconds hand for better battery performance

@@ -96,9 +96,9 @@ static void update_battery_display(void) {
     snprintf(s_batt_text_buf, sizeof(s_batt_text_buf), fmt, state.charge_percent);
     text_layer_set_text(s_batt_text_layer, s_batt_text_buf);
   } else {
-    int frame = state.is_charging ? 10 : (10 - state.charge_percent / 10);
+    int frame = state.is_charging ? 11 : (10 - state.charge_percent / 10);
     if (s_batt_frame) gbitmap_destroy(s_batt_frame);
-    s_batt_frame = gbitmap_create_as_sub_bitmap(s_batt_all, GRect(0, frame * 10, 20, 10));
+    s_batt_frame = gbitmap_create_as_sub_bitmap(s_batt_all, GRect(0, frame * 14, 30, 14));
     bitmap_layer_set_bitmap(s_batt_icon_layer, s_batt_frame);
   }
 }
