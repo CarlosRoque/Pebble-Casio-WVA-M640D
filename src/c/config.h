@@ -20,24 +20,24 @@
 #define SECOND_LAYER_SIZE 142  // 2 * ceil(max rotation radius ~67px) + margin
 
 // Weather layer layout
-#define WEATHER_ICON_X  150
-#define WEATHER_ICON_Y  185
+#define WEATHER_ICON_X  148
+#define WEATHER_ICON_Y  182
 #define WEATHER_ICON_W   40
 #define WEATHER_ICON_H   45
 
 #define WEATHER_TEMP_X   10
-#define WEATHER_TEMP_Y  195
+#define WEATHER_TEMP_Y  188
 #define WEATHER_TEMP_W   70
-#define WEATHER_TEMP_H   22
+#define WEATHER_TEMP_H   27
 
 // Date and status indicator layout
 #define DAY_LAYER_X     60
-#define DAY_LAYER_Y    142
+#define DAY_LAYER_Y    136
 #define DAY_LAYER_W     45
 #define DAY_LAYER_H     40
 
-#define DAY_NUM_LAYER_X 105
-#define DAY_NUM_LAYER_Y 146
+#define DAY_NUM_LAYER_X 103
+#define DAY_NUM_LAYER_Y 144
 #define DAY_NUM_LAYER_W  25
 #define DAY_NUM_LAYER_H  20
 
@@ -57,7 +57,7 @@
 #define BATT_ICON_W     20
 #define BATT_ICON_H     10
 
-#define BATT_TEXT_X    145
+#define BATT_TEXT_X    135
 #define BATT_TEXT_Y      3
-#define BATT_TEXT_W     50
-#define BATT_TEXT_H     18
+#define BATT_TEXT_W     60
+#define BATT_TEXT_H     34

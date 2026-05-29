@@ -47,6 +47,14 @@ function boolSetting(val, defaultVal) {
   return (val === true || val === 'true' || val === '1' || parseInt(val) === 1) ? 1 : 0;
 }
 
+Pebble.addEventListener('appmessage', function(e) {
+  if (e.payload.W_REQUEST) {
+    var settings = JSON.parse(localStorage.getItem('clay-settings') || '{}');
+    var apiKey = settings.OWM_API_KEY || DEFAULT_API_KEY;
+    fetchWeather(apiKey);
+  }
+});
+
 Pebble.addEventListener('ready', function() {
   var settings = JSON.parse(localStorage.getItem('clay-settings') || '{}');
   var apiKey = settings.OWM_API_KEY || DEFAULT_API_KEY;

@@ -1,7 +1,7 @@
 {
   "name": "Casio WVA-M640D",
   "author": "MakeAwesomeHappen",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "keywords": [
     "pebble-app"
   ],
@@ -29,7 +29,8 @@
       "S_VIB_BT",
       "S_BATT_SHOW_PCT",
       "S_SHOW_SECONDS",
-      "OWM_API_KEY"
+      "OWM_API_KEY",
+      "W_REQUEST"
     ],
     "resources": {
       "media": [
@@ -62,21 +63,9 @@
           "file": "images/Battery.png"
         },
         {
-          "characterRegex": "[-+ACDEFHIMNOSTUW:0-9°%]",
-          "type": "font",
-          "name": "DOTO_18",
-          "file": "fonts/Doto-VariableFont_ROND,wght.ttf"
-        },
-        {
-          "characterRegex": "[-+ACDEFHIMNOSTUW:0-9°%]",
-          "type": "font",
-          "name": "DOTO_17",
-          "file": "fonts/Doto-VariableFont_ROND,wght.ttf"
-        },
-        {
           "characterRegex": "[I\"!k$+F9=N#,>h]",
           "type": "font",
-          "name": "WEATHER_ICON_34",
+          "name": "WEATHER_ICON_38",
           "file": "fonts/Climacons.ttf"
         }
       ]

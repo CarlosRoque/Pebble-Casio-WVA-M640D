@@ -11,9 +11,8 @@ static GBitmap *s_minute_hand_bitmap;
 static RotBitmapLayer *s_second_hand_layer;
 static GBitmap *s_second_hand_bitmap;
 static TextLayer *s_day_layer;
-static GFont s_large_font;
-static GFont s_small_font;
 static GFont s_system_font;
+static GFont s_system_large_font;
 static TextLayer *s_day_num_layer;
 static Layer *s_dst_layer;
 static Layer *s_bt_layer;
@@ -139,6 +138,12 @@ static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
 
   if (s_seconds_timer) app_timer_cancel(s_seconds_timer);
   s_seconds_timer = app_timer_register(BACKLIGHT_DURATION_MS, seconds_timer_callback, NULL);
+
+  DictionaryIterator *iter;
+  if (app_message_outbox_begin(&iter) == APP_MSG_OK) {
+    dict_write_uint8(iter, MESSAGE_KEY_W_REQUEST, 1);
+    app_message_outbox_send();
+  }
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
@@ -233,12 +238,12 @@ static TextLayer *create_text_layer(Layer *parent, GRect text_box, GFont font, G
 }
 
 static void dst_layer_update_proc(Layer *layer, GContext *ctx) {
-  graphics_context_set_fill_color(ctx, GColorDarkGray);
+  graphics_context_set_fill_color(ctx, GColorBlack);
   graphics_fill_rect(ctx, layer_get_bounds(layer), 0, GCornerNone);
 }
 
 static void bt_layer_update_proc(Layer *layer, GContext *ctx) {
-  graphics_context_set_fill_color(ctx, GColorDarkGray);
+  graphics_context_set_fill_color(ctx, GColorBlack);
   graphics_fill_rect(ctx, layer_get_bounds(layer), 0, GCornerNone);
 }
 
@@ -259,15 +264,14 @@ static void prv_window_load(Window *window) {
   bitmap_layer_set_bitmap(s_bg_layer, s_bg_bitmap);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_bg_layer));
 
-  s_large_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DOTO_18));
-  s_small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DOTO_17));
   s_system_font = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
+  s_system_large_font = fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD);
 
-  s_day_layer = create_text_layer(window_layer, GRect(DAY_LAYER_X, DAY_LAYER_Y, DAY_LAYER_W, DAY_LAYER_H), s_large_font, GTextAlignmentCenter);
-  text_layer_set_text_color(s_day_layer, GColorDarkGray);
+  s_day_layer = create_text_layer(window_layer, GRect(DAY_LAYER_X, DAY_LAYER_Y, DAY_LAYER_W, DAY_LAYER_H), s_system_large_font, GTextAlignmentCenter);
+  text_layer_set_text_color(s_day_layer, GColorBlack);
 
-  s_day_num_layer = create_text_layer(window_layer, GRect(DAY_NUM_LAYER_X, DAY_NUM_LAYER_Y, DAY_NUM_LAYER_W, DAY_NUM_LAYER_H), s_small_font, GTextAlignmentRight);
-  text_layer_set_text_color(s_day_num_layer, GColorDarkGray);
+  s_day_num_layer = create_text_layer(window_layer, GRect(DAY_NUM_LAYER_X, DAY_NUM_LAYER_Y, DAY_NUM_LAYER_W, DAY_NUM_LAYER_H), s_system_font  , GTextAlignmentRight);
+  text_layer_set_text_color(s_day_num_layer, GColorBlack);
 
   s_dst_layer = layer_create(GRect(DST_LAYER_X, DST_LAYER_Y, DST_LAYER_W, DST_LAYER_H));
   layer_set_update_proc(s_dst_layer, dst_layer_update_proc);
@@ -287,14 +291,14 @@ static void prv_window_load(Window *window) {
 
   s_batt_text_layer = create_text_layer(window_layer,
     GRect(BATT_TEXT_X, BATT_TEXT_Y, BATT_TEXT_W, BATT_TEXT_H),
-    s_system_font, GTextAlignmentRight);
+    s_system_large_font, GTextAlignmentRight);
   text_layer_set_text_color(s_batt_text_layer, GColorWhite);
   text_layer_set_text(s_batt_text_layer, s_batt_text_buf);
   layer_set_hidden(bitmap_layer_get_layer(s_batt_icon_layer), s_batt_display_pct);
   layer_set_hidden(text_layer_get_layer(s_batt_text_layer), !s_batt_display_pct);
   update_battery_display();
 
-  s_weather_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_WEATHER_ICON_34));
+  s_weather_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_WEATHER_ICON_38));
   s_weather_icon_layer = create_text_layer(window_layer,
     GRect(WEATHER_ICON_X, WEATHER_ICON_Y, WEATHER_ICON_W, WEATHER_ICON_H),
     s_weather_font, GTextAlignmentRight);
@@ -303,7 +307,7 @@ static void prv_window_load(Window *window) {
 
   s_weather_temp_layer = create_text_layer(window_layer,
     GRect(WEATHER_TEMP_X, WEATHER_TEMP_Y, WEATHER_TEMP_W, WEATHER_TEMP_H),
-    s_system_font, GTextAlignmentLeft);
+    s_system_large_font, GTextAlignmentLeft);
   text_layer_set_text_color(s_weather_temp_layer, GColorWhite);
   text_layer_set_text(s_weather_temp_layer, s_weather_temp_buf);
 
@@ -349,8 +353,6 @@ static void prv_window_unload(Window *window) {
   gbitmap_destroy(s_hour_hand_bitmap);
   gbitmap_destroy(s_bg_bitmap);
   fonts_unload_custom_font(s_weather_font);
-  fonts_unload_custom_font(s_large_font);
-  fonts_unload_custom_font(s_small_font);
 }
 
 static void prv_init(void) {
